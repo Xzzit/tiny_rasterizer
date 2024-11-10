@@ -1,0 +1,3 @@
+/home/ray/tiny_renderer/build/CMakeFiles/rebuild_cache.dir
+/home/ray/tiny_renderer/build/CMakeFiles/edit_cache.dir
+/home/ray/tiny_renderer/build/CMakeFiles/Rasterizer.dir

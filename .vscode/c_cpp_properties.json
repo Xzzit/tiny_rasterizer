@@ -1,0 +1,25 @@
+{
+    // WSL Ubuntu 20.04
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                
+                "/usr/include/opencv4",
+                "/usr/include/opencv4/opencv2",
+                
+                "/usr/include/eigen3",
+                "/usr/include/eigen3/Eigen",
+                
+                "/usr/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}
