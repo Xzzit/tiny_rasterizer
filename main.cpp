@@ -16,7 +16,7 @@ int main(int argc, const char *argv[])
     r.clear();
 
     // Set camera position
-    Eigen::Vector3f eye_pos = Eigen::Vector3f(0, 0, 3);
+    Eigen::Vector3f eye_pos = Eigen::Vector3f(-1, 0, 2);
 
     // Load the obj file
     objl::Loader Loader;
@@ -81,8 +81,8 @@ int main(int argc, const char *argv[])
     // Draw the triangle & measure the time
     auto start = std::chrono::high_resolution_clock::now();
 
-    // r.rasterize_line(TriangleList); // Draw the triangle with lines
-    r.rasterize_triangle(TriangleList); // Draw the triangle with solid random color
+    r.rasterize_line(TriangleList); // Draw the triangle with lines
+    // r.rasterize_triangle(TriangleList); // Draw the triangle with solid random color
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;

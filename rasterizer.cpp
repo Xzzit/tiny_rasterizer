@@ -47,10 +47,10 @@ auto to_vec4(const Vector3f& v3, float w = 1.0f)
 // Set a pixel
 void rst::rasterizer::set_pixel(Vector2i point, Vector3f color)
 {
-    if (point.x() < 0 || point.x() > width ||
-        point.y() < 0 || point.y() > height) return;
+    if (point.x() < 0 || point.x() >= width ||
+        point.y() < 0 || point.y() >= height) return;
 
-    auto ind = (height - point.y()) * width + point.x();
+    auto ind = (height - point.y() - 1) * width + point.x();
     frame_buf[ind] = color;
 }
 
@@ -246,8 +246,8 @@ void rst::rasterizer::rasterize_line(std::vector<Triangle*> TriangleList)
         float f2 = (far + near) / 2.0f;
         for (auto &vec : v)
         {
-            vec.x() = (vec.x() + 1.0f) * 0.5f * width; // [0, width]
-            vec.y() = (vec.y() + 1.0f) * 0.5f * height; // [0, height]
+            vec.x() = (vec.x() + 1.0f) * 0.5f * width; // [0, width-1]
+            vec.y() = (vec.y() + 1.0f) * 0.5f * height; // [0, height-1]
             vec.z() = f1 * vec.z() + f2; // [near, far]
         }
 
@@ -353,8 +353,8 @@ void rst::rasterizer::rasterize_triangle(std::vector<Triangle*> TriangleList)
         float f2 = (far + near) / 2.0f;
         for (auto &vec : v)
         {
-            vec.x() = (vec.x() + 1.0f) * 0.5f * width; // [0, width]
-            vec.y() = (vec.y() + 1.0f) * 0.5f * height; // [0, height]
+            vec.x() = (vec.x() + 1.0f) * 0.5f * width; // [0, width-1]
+            vec.y() = (vec.y() + 1.0f) * 0.5f * height; // [0, height-1]
             vec.z() = f1 * vec.z() + f2; // [near, far]
         }
 
@@ -376,7 +376,7 @@ void rst::rasterizer::rasterize_triangle(std::vector<Triangle*> TriangleList)
                     z_interpolated = alpha * v[0].z() + beta * v[1].z() + gamma * v[2].z();
 
                     // Update depth buffer
-                    int ind = (height - y) * width + x;
+                    int ind = (height - y - 1) * width + x;
                     if (z_interpolated < depth_buf[ind].z())
                     {
                         depth_buf[ind] = Vector3f(x, y, z_interpolated);
