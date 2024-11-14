@@ -80,7 +80,10 @@ int main(int argc, const char *argv[])
 
     // Draw the triangle & measure the time
     auto start = std::chrono::high_resolution_clock::now();
-    r.rasterize_line(TriangleList);
+
+    // r.rasterize_line(TriangleList); // Draw the triangle with lines
+    r.rasterize_triangle(TriangleList); // Draw the triangle with solid random color
+
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
     std::cout << "Rasterize function took " << duration.count() << " seconds." << std::endl;

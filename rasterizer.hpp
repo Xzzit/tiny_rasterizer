@@ -11,7 +11,7 @@ namespace rst
     class rasterizer
     {
         public:
-            rasterizer(int w, int h);
+            rasterizer(int w, int h, int sample_rate=1);
 
             void clear();
 
@@ -24,6 +24,9 @@ namespace rst
             void draw_line(Eigen::Vector3f begin, Eigen::Vector3f end);
             void draw_line_bresenham(Eigen::Vector3f begin, Eigen::Vector3f end);
             void rasterize_line(std::vector<Triangle*> TriangleList);
+
+            // Draw a solid triangle
+            void rasterize_triangle(std::vector<Triangle*> TriangleList);
 
             std::vector<Eigen::Vector3f>& frame_buffer() { return frame_buf; }
             std::vector<Eigen::Vector3f>& depth_buffer() { return depth_buf; }
