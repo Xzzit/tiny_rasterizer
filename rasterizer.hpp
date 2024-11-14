@@ -29,7 +29,7 @@ namespace rst
             void rasterize_triangle(std::vector<Triangle*> TriangleList);
 
             std::vector<Eigen::Vector3f>& frame_buffer() { return frame_buf; }
-            std::vector<Eigen::Vector3f>& depth_buffer() { return depth_buf; }
+            std::vector<float>& depth_buffer() { return depth_buf; }
 
             int get_width() { return width; }
             int get_height() { return height; }
@@ -38,7 +38,7 @@ namespace rst
             int width, height;
 
             std::vector<Eigen::Vector3f> frame_buf;
-            std::vector<Eigen::Vector3f> depth_buf;
+            std::vector<float> depth_buf;
 
             Eigen::Matrix4f model;
             Eigen::Matrix4f view;

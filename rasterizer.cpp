@@ -12,14 +12,14 @@ rst::rasterizer::rasterizer(int w, int h, int sample_rate)
     width = w;
     height = h;
     frame_buf = std::vector<Vector3f>(w * h);
-    depth_buf = std::vector<Vector3f>(w * h * sample_rate);
+    depth_buf = std::vector<float>(w * h * sample_rate);
 }
 
 // Clear the frame buffer
 void rst::rasterizer::clear()
 {
     std::fill(frame_buf.begin(), frame_buf.end(), Vector3f(0, 0, 0));
-    std::fill(depth_buf.begin(), depth_buf.end(), Vector3f(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity()));
+    std::fill(depth_buf.begin(), depth_buf.end(), std::numeric_limits<float>::infinity());
 }
 
 // Set MVP matrix
@@ -377,9 +377,9 @@ void rst::rasterizer::rasterize_triangle(std::vector<Triangle*> TriangleList)
 
                     // Update depth buffer
                     int ind = (height - y - 1) * width + x;
-                    if (z_interpolated < depth_buf[ind].z())
+                    if (z_interpolated < depth_buf[ind])
                     {
-                        depth_buf[ind] = Vector3f(x, y, z_interpolated);
+                        depth_buf[ind] = z_interpolated;
                         set_pixel(Vector2i(x, y), t_color);
                     }
                 }
