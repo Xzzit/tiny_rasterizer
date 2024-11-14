@@ -376,7 +376,7 @@ void rst::rasterizer::rasterize_triangle(std::vector<Triangle*> TriangleList)
                     z_interpolated = alpha * v[0].z() + beta * v[1].z() + gamma * v[2].z();
 
                     // Update depth buffer
-                    int ind = (height - y - 1) * width + x;
+                    int ind = (height - y) * width + x;
                     if (z_interpolated < depth_buf[ind].z())
                     {
                         depth_buf[ind] = Vector3f(x, y, z_interpolated);
