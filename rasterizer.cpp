@@ -281,8 +281,8 @@ void rst::rasterizer::rasterize_line(std::vector<Triangle*> TriangleList)
         float f2 = (far + near) / 2.0f;
         for (auto &vec : v)
         {
-            vec.x() = (vec.x() + 1.0f) * 0.5f * width; // [0, width-1]
-            vec.y() = (vec.y() + 1.0f) * 0.5f * height; // [0, height-1]
+            vec.x() = (vec.x() + 1.0f) * 0.5f * width; // [0, width]
+            vec.y() = (vec.y() + 1.0f) * 0.5f * height; // [0, height]
             vec.z() = f1 * vec.z() + f2; // [near, far]
         }
 
@@ -308,14 +308,18 @@ void rst::rasterizer::rasterize_line(std::vector<Triangle*> TriangleList)
 }
 
 // Compute AABB
-Vector4i compute_AABB(Vector4f v[])
+Vector4i compute_AABB(Vector4f v[], int width, int height)
 {
     Vector4i aabb;
 
     int left = std::min(v[0].x(), std::min(v[1].x(), v[2].x()));
+    left = std::max(0, left);
     int right = std::max(v[0].x(), std::max(v[1].x(), v[2].x()));
+    right = std::min(right, width - 1);
     int bottom = std::min(v[0].y(), std::min(v[1].y(), v[2].y()));
+    bottom = std::max(0, bottom);
     int top = std::max(v[0].y(), std::max(v[1].y(), v[2].y()));
+    top = std::min(top, height - 1);
 
     aabb << left, right, bottom, top;
 
@@ -388,13 +392,13 @@ void rst::rasterizer::rasterize_triangle(std::vector<Triangle*> TriangleList)
         float f2 = (far + near) / 2.0f;
         for (auto &vec : v)
         {
-            vec.x() = (vec.x() + 1.0f) * 0.5f * width; // [0, width-1]
-            vec.y() = (vec.y() + 1.0f) * 0.5f * height; // [0, height-1]
+            vec.x() = (vec.x() + 1.0f) * 0.5f * width; // [0, width]
+            vec.y() = (vec.y() + 1.0f) * 0.5f * height; // [0, height]
             vec.z() = f1 * vec.z() + f2; // [near, far]
         }
 
         // Compute AABB
-        Vector4i aabb = compute_AABB(v);
+        Vector4i aabb = compute_AABB(v, this->get_width(), this->get_height());
         Vector3f t_color = random_color();
 
         // Rasterization
