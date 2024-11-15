@@ -20,7 +20,7 @@ int main(int argc, const char *argv[])
 
     // Load the obj file
     objl::Loader Loader;
-    std::string model_path = "/home/ray/tiny_renderer/models/spot.obj";
+    std::string model_path = "../models/spot.obj";
     bool loadout = Loader.LoadFile(model_path);
 
     if (!loadout)
