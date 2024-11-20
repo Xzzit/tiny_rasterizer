@@ -254,15 +254,21 @@ void rst::rasterizer::rasterize_line(std::vector<Triangle*> TriangleList)
 // Compute AABB
 Vector4i compute_AABB(Vector4f v[], int width, int height)
 {
-    Vector4i aabb;
+    Vector4i aabb = Vector4i::Zero();
 
     int left = std::min(v[0].x(), std::min(v[1].x(), v[2].x()));
-    left = std::max(0, left);
     int right = std::max(v[0].x(), std::max(v[1].x(), v[2].x()));
-    right = std::min(right, width - 1);
     int bottom = std::min(v[0].y(), std::min(v[1].y(), v[2].y()));
-    bottom = std::max(0, bottom);
     int top = std::max(v[0].y(), std::max(v[1].y(), v[2].y()));
+
+    if (left >= width || right < 0 || bottom >= height || top < 0)
+    {
+        return aabb;
+    }
+
+    left = std::max(0, left);
+    right = std::min(right, width - 1);
+    bottom = std::max(0, bottom);
     top = std::min(top, height - 1);
 
     aabb << left, right, bottom, top;
