@@ -90,7 +90,6 @@ void rst::rasterizer::set_pixel(Vector2i point, Vector3f color)
 }
 
 // Draw a line
-// Note: for close points (at x axis), the line may not be drawn
 void rst::rasterizer::draw_line(Vector3f begin, Vector3f end)
 {
     int x1 = begin.x();
@@ -98,6 +97,11 @@ void rst::rasterizer::draw_line(Vector3f begin, Vector3f end)
     int x2 = end.x();
     int y2 = end.y();
 
+    // Check if two points are out of the screen, return if true
+    if ((x1 < 0 && x2 < 0) || (x1 >= width && x2 >= width) ||
+        (y1 < 0 && y2 < 0) || (y1 >= height && y2 >= height)) return;
+
+    // Set the color of the line
     Eigen::Vector3f line_color = {255, 255, 255};
 
     // Make sure begin is on the left
@@ -152,102 +156,42 @@ void rst::rasterizer::draw_line(Vector3f begin, Vector3f end)
 }
 
 // Bresenham's line drawing algorithm
-void rst::rasterizer::draw_line_bresenham(Eigen::Vector3f begin, Eigen::Vector3f end)
+void rst::rasterizer::draw_line_bresenham(Vector3f begin, Vector3f end)
 {
-    auto x1 = begin.x();
-    auto y1 = begin.y();
-    auto x2 = end.x();
-    auto y2 = end.y();
+    int x1 = begin.x();
+    int y1 = begin.y();
+    int x2 = end.x();
+    int y2 = end.y();
 
+    // Check if two points are out of the screen, return if true
+    if ((x1 < 0 && x2 < 0) || (x1 >= width && x2 >= width) ||
+        (y1 < 0 && y2 < 0) || (y1 >= height && y2 >= height)) return;
+
+    // Set the color of the line
     Eigen::Vector3f line_color = {255, 255, 255};
 
-    int x,y,dx,dy,dx1,dy1,px,py,xe,ye,i;
+    // Bresenham's line algorithm
+    int dx = std::abs(x2 - x1);
+    int dy = std::abs(y2 - y1);
+    int sx = (x1 < x2) ? 1 : -1;
+    int sy = (y1 < y2) ? 1 : -1;
+    int err = dx - dy;
 
-    dx=x2-x1;
-    dy=y2-y1;
-    dx1=fabs(dx);
-    dy1=fabs(dy);
-    px=2*dy1-dx1;
-    py=2*dx1-dy1;
+    while (true)
+    {
+        set_pixel(Vector2i(x1, y1), line_color);
 
-    if(dy1<=dx1)
-    {
-        if(dx>=0)
+        if (x1 == x2 && y1 == y2) break;
+        int e2 = 2 * err;
+        if (e2 > -dy)
         {
-            x=x1;
-            y=y1;
-            xe=x2;
+            err -= dy;
+            x1 += sx;
         }
-        else
+        if (e2 < dx)
         {
-            x=x2;
-            y=y2;
-            xe=x1;
-        }
-        Eigen::Vector2i point = Eigen::Vector2i(x, y);
-        set_pixel(point, line_color);
-        for(i=0;x<xe;i++)
-        {
-            x=x+1;
-            if(px<0)
-            {
-                px=px+2*dy1;
-            }
-            else
-            {
-                if((dx<0 && dy<0) || (dx>0 && dy>0))
-                {
-                    y=y+1;
-                }
-                else
-                {
-                    y=y-1;
-                }
-                px=px+2*(dy1-dx1);
-            }
-//            delay(0);
-            Eigen::Vector2i point = Eigen::Vector2i(x, y);
-            set_pixel(point, line_color);
-        }
-    }
-    else
-    {
-        if(dy>=0)
-        {
-            x=x1;
-            y=y1;
-            ye=y2;
-        }
-        else
-        {
-            x=x2;
-            y=y2;
-            ye=y1;
-        }
-        Eigen::Vector2i point = Eigen::Vector2i(x, y);
-        set_pixel(point, line_color);
-        for(i=0;y<ye;i++)
-        {
-            y=y+1;
-            if(py<=0)
-            {
-                py=py+2*dx1;
-            }
-            else
-            {
-                if((dx<0 && dy<0) || (dx>0 && dy>0))
-                {
-                    x=x+1;
-                }
-                else
-                {
-                    x=x-1;
-                }
-                py=py+2*(dx1-dy1);
-            }
-//            delay(0);
-            Eigen::Vector2i point = Eigen::Vector2i(x, y);
-            set_pixel(point, line_color);
+            err += dx;
+            y1 += sy;
         }
     }
 }
