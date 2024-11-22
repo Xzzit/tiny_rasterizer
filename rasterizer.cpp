@@ -74,7 +74,7 @@ void rst::rasterizer::set_projection(const Matrix4f &p)
 }
 
 // Homogeneous coordinates transformation
-auto to_vec4(const Vector3f& v3, float w = 1.0f)
+Vector4f rst::rasterizer::to_vec4(const Vector3f& v3, float w)
 {
     return Vector4f(v3.x(), v3.y(), v3.z(), w);
 }

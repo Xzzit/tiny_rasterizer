@@ -9,7 +9,7 @@ using namespace Eigen;
 const float PI = 3.1415926f;
 
 // Compute AABB
-Vector4i compute_AABB(Vector4f v[], int width, int height)
+Vector4i rst::rasterizer::compute_AABB(Vector4f v[], int width, int height)
 {
     Vector4i aabb = Vector4i::Zero();
 
@@ -34,7 +34,7 @@ Vector4i compute_AABB(Vector4f v[], int width, int height)
 }
 
 // Generate random color
-Vector3f random_color()
+Vector3f rst::rasterizer::random_color()
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -44,7 +44,7 @@ Vector3f random_color()
 }
 
 // Check if a point is inside the triangle
-bool inside_triangle(Vector2f point, Vector4f v[])
+bool rst::rasterizer::inside_triangle(Vector2f point, Vector4f v[])
 {
     Vector2f AB = Vector2f(v[1].x() - v[0].x(), v[1].y() - v[0].y());
     Vector2f BC = Vector2f(v[2].x() - v[1].x(), v[2].y() - v[1].y());
@@ -62,7 +62,7 @@ bool inside_triangle(Vector2f point, Vector4f v[])
 }
 
 // Barycentric interpolation
-static std::tuple<float, float, float> computeBarycentric2D(float x, float y, const Vector4f* v)
+std::tuple<float, float, float> rst::rasterizer::computeBarycentric2D(float x, float y, const Vector4f* v)
 {
     float c1 = (x*(v[1].y() - v[2].y()) + (v[2].x() - v[1].x())*y + v[1].x()*v[2].y() - v[2].x()*v[1].y()) / (v[0].x()*(v[1].y() - v[2].y()) + (v[2].x() - v[1].x())*v[0].y() + v[1].x()*v[2].y() - v[2].x()*v[1].y());
     float c2 = (x*(v[2].y() - v[0].y()) + (v[0].x() - v[2].x())*y + v[2].x()*v[0].y() - v[0].x()*v[2].y()) / (v[1].x()*(v[2].y() - v[0].y()) + (v[0].x() - v[2].x())*v[1].y() + v[2].x()*v[0].y() - v[0].x()*v[2].y());

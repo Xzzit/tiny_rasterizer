@@ -12,6 +12,7 @@ include_directories(/usr/include/opencv4)
 add_executable(
     Rasterizer main.cpp 
     rasterizer.hpp rasterizer.cpp rasterizer_drawLine.cpp rasterizer_drawTriangle.cpp
+    rasterizer_BlinnPhong.cpp
     obj_loader.hpp
     triangle.hpp triangle.cpp)
 target_link_libraries(Rasterizer ${OpenCV_LIBRARIES})

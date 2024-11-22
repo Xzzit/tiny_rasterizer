@@ -41,6 +41,10 @@ int main(int argc, const char *argv[])
                     curMesh.Vertices[i + j].Position.Y, 
                     curMesh.Vertices[i + j].Position.Z, 
                     1.0f));
+                t->set_normal(j, Eigen::Vector3f(
+                    curMesh.Vertices[i + j].Normal.X, 
+                    curMesh.Vertices[i + j].Normal.Y, 
+                    curMesh.Vertices[i + j].Normal.Z));
             }
 
             TriangleList.push_back(t);
@@ -51,7 +55,8 @@ int main(int argc, const char *argv[])
     auto start = std::chrono::high_resolution_clock::now();
 
     // r.rasterize_line(TriangleList); // Draw the triangle with lines
-    r.rasterize_triangle(TriangleList); // Draw the triangle with solid random color
+    // r.rasterize_triangle(TriangleList); // Draw the triangle with solid random color
+    r.rasterize_BlinnPhong(TriangleList); // Draw the triangle with Blinn-Phong shading
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
