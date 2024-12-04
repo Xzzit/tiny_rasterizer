@@ -99,13 +99,28 @@ void rst::rasterizer::rasterize_triangle(std::vector<Triangle*> TriangleList)
         float f2 = (far + near) / 2.0f;
         for (auto &vec : v)
         {
-            vec.x() = (vec.x() + 1.0f) * 0.5f * width; // [0, width]
-            vec.y() = (vec.y() + 1.0f) * 0.5f * height; // [0, height]
+            vec.x() = ((vec.x() + 1.0f) * width - 1.0) * 0.5f; // [0, width-1]
+            vec.y() = ((vec.y() + 1.0f) * height - 1.0) * 0.5f; // [0, height-1]
             vec.z() = f1 * vec.z() + f2; // [near, far]
+        }
+
+        // Frustum culling
+        if (v[0].z() < near || v[0].z() > far ||
+            v[1].z() < near || v[1].z() > far ||
+            v[2].z() < near || v[2].z() > far)
+        {
+            continue;
         }
 
         // Compute AABB
         Vector4i aabb = compute_AABB(v, this->get_width(), this->get_height());
+        
+        // Return if the triangle is out of the screen
+        if (aabb.y()==0 || aabb.w()==0)
+        {
+            continue;
+        }
+
         Vector3f t_color = random_color();
 
         // Rasterization
