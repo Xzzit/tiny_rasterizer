@@ -129,12 +129,12 @@ void rst::rasterizer::rasterize_triangle(std::vector<Triangle*> TriangleList)
             for (int y = aabb.z(); y <= aabb.w(); y++)
             {
                 Vector2f point = Vector2f(x + 0.5f, y + 0.5f);
-                float z_interpolated = std::numeric_limits<float>::infinity();
-
+                
                 if (inside_triangle(point, v))
                 {
+                    // Barycentric interpolation
                     auto [alpha, beta, gamma] = computeBarycentric2D(point.x(), point.y(), v);
-                    z_interpolated = alpha * v[0].z() + beta * v[1].z() + gamma * v[2].z();
+                    float z_interpolated = alpha * v[0].z() + beta * v[1].z() + gamma * v[2].z();
 
                     // Update depth buffer
                     int ind = (height - y - 1) * width + x;
